@@ -3,34 +3,42 @@ import axios from 'axios';
 import UserContext from './UserContext';
 
 
-function Register() {
+function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
 
   const user = useContext(UserContext);
 
-  function registerUser(e) {
+  function loginUser(e) {
     e.preventDefault();
 
     const data= {email, password};
-    axios.post('http://localhost:4000/register', data, {withCredentials:true})
+    axios.post('http://localhost:4000/login', data, {withCredentials:true})
       .then(response => {
         user.setEmail(response.data.email);
         setEmail('');
         setPassword('');
+        setLoginError(false);
+      })
+      .catch(() => {
+        setLoginError(true);
       });
 
   }
 
 
   return(
-    <form action="" onSubmit={e => registerUser(e)}>
+    <form action="" onSubmit={e => loginUser(e)}>
+      {loginError && (
+        <div>WRONG EMAIL OR PASSWORD!</div>
+      )}
       <input type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)}/><br />
       <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)}/><br />
-      <button type="submit">register</button>
+      <button type="submit">login</button>
     </form>
   );
 }
 
-export default Register;
+export default Login;
