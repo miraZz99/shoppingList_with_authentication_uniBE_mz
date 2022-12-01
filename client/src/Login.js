@@ -1,6 +1,7 @@
 import {useState, useContext} from 'react';
 import axios from 'axios';
 import UserContext from './UserContext';
+import {Navigate} from "react-router-dom";
 
 
 function Login() {
@@ -8,6 +9,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   const user = useContext(UserContext);
 
@@ -21,6 +23,7 @@ function Login() {
         setEmail('');
         setPassword('');
         setLoginError(false);
+        setRedirect(true);
       })
       .catch(() => {
         setLoginError(true);
@@ -28,11 +31,15 @@ function Login() {
 
   }
 
+  if (redirect) {
+    return <Navigate to={'/'}/>
+  }
+
 
   return(
     <form action="" onSubmit={e => loginUser(e)}>
       {loginError && (
-        <div>WRONG EMAIL OR PASSWORD!</div>
+        <div>Chýbné heslo nebo email</div>
       )}
       <input type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)}/><br />
       <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)}/><br />

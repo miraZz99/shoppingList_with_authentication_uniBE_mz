@@ -6,6 +6,7 @@ import User from "./models/User.js";
 import bcrypt from 'bcrypt';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import ShoppingList from './models/ShoppingList.js';
 
 const secret = 'secret123';
 
@@ -73,6 +74,38 @@ app.post('/login', (req, res) => {
 
 app.post('/logout', (req, res) => {
   res.cookie('token', '').send();
+});
+
+app.get('/shoppingList', (req, res) => {
+  const payload = jwt.verify(req.cookies.token, secret);
+  ShoppingList.where({user:new mongoose.Types.ObjectId(payload.id)})
+  .find((err, items) => {
+    res.json(items);
+  })
+});
+
+app.put('/shoppingList', (req, res) => {
+  const payload = jwt.verify(req.cookies.token, secret);
+  const shoppingList = new ShoppingList({
+    text:req.body.text,
+    done:false,
+    user:new mongoose.Types.ObjectId(payload.id),
+  });
+  shoppingList.save().then(shoppingList => {
+    res.json(shoppingList);
+  })
+})
+
+app.post('/shoppingList', (req, res) => {
+  const payload = jwt.verify(req.cookies.token, secret);
+  ShoppingList.updateOne({
+    _id:new mongoose.Types.ObjectId(req.body.id),
+    user:new mongoose.Types.ObjectId(payload.id),
+  }, {
+    done:req.body.done,
+  }).then(() => {
+    res.sendStatus(200);
+  });
 });
 
 app.listen(4000);

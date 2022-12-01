@@ -5,6 +5,7 @@ import Register from "./Register";
 import UserContext from './UserContext';
 import axios from 'axios';
 import Login from "./Login";
+import Home from "./Home";
 
 function App() {
   const [email, setEmail] = useState('');
@@ -28,28 +29,25 @@ function App() {
     <UserContext.Provider value={{email, setEmail}}>
    
       <BrowserRouter>
-        <div>
-          {!!email && (
-            <div>
-              Logged in as {email}
-              <button onClick={() => logout()}>Log out</button>
-            </div>
-          )}
+        <nav>
+          <Link to={'/'}>Home</Link>
           {!email && (
-            <div>Not logged in</div>
+            <>
+              <Link to={'/login'}>Login</Link>
+              <Link to={'/register'}>Register</Link>
+            </>
           )}
-        </div>
-        <hr/>
-        <div>
-          <Link to={'/'}>Home</Link> |
-          <Link to={'/login'}>Login</Link> |
-          <Link to={'/register'}>Register</Link>
-        </div>
-        <Routes>
-          <Route exact path={'/register'} element={<Register/>}/>
-          <Route exact path={'/login'} element={<Login/>}/> 
-        </Routes>
-        <hr/>
+          {!!email && (
+            <a onClick={e => {e.preventDefault();logout();}}>Logout</a>
+          )}
+        </nav>
+        <main>
+          <Routes>
+          <Route exact path={'/'} element={<Home/>}/>
+            <Route exact path={'/register'} element={<Register/>}/>
+            <Route exact path={'/login'} element={<Login/>}/>
+          </Routes>
+        </main>
       </BrowserRouter>
     </UserContext.Provider>
   );
