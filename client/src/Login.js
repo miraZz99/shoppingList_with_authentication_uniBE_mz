@@ -42,8 +42,8 @@ function Login() {
         <div>Chýbné heslo nebo email</div>
       )}
       <input type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)}/><br />
-      <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)}/><br />
-      <button type="submit">login</button>
+      <input type="password" placeholder="heslo" value={password} onChange={e => setPassword(e.target.value)}/><br />
+      <button type="submit">Přihlásit</button>
     </form>
   );
 }

@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import UserContext from "./UserContext";
 
 
-function Home() {
+function PersonalShoppingList() {
   const userInfo = useContext(UserContext);
   const [inputVal, setInputVal] = useState( '');
   const [items, setItems] = useState([]);
@@ -59,4 +59,4 @@ function Home() {
   </div>
 }
 
-export default Home;
+export default PersonalShoppingList;
